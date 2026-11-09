@@ -1,0 +1,34 @@
+CANON SCAN SETUP 1.0 — Scan vers dossier & Scan vers e-mail pour imprimantes Canon
+====================================================================================
+
+Le guide complet est dans : docs/Guide_Canon_Scan_Setup.pdf
+
+DÉMARRAGE RAPIDE
+  Windows : double-cliquez sur Lancer_Windows.bat
+  macOS   : clic droit sur Lancer_Mac.command > Ouvrir
+            (si « permission refusée » : dans le Terminal, tapez
+             chmod +x Lancer_Mac.command   puis relancez)
+
+PRÉREQUIS
+  Python 3.9 ou plus récent (https://www.python.org/downloads/). Aucune autre dépendance.
+
+MODE SERVICE (relais SMTP sans interface)
+  python CanonScanSetup.py --relay
+
+CRÉER UN EXÉCUTABLE AUTONOME (facultatif)
+  Windows : build_windows.bat   -> dist\CanonScanSetup.exe
+  macOS   : bash build_mac.sh   -> dist/CanonScanSetup.app
+
+FICHIERS
+  CanonScanSetup.py        point d'entrée
+  canonscan/gui.py         interface graphique
+  canonscan/sharing.py     création du partage SMB (Windows / macOS)
+  canonscan/smtp_relay.py  relais SMTP local
+  canonscan/mailer.py      envoi vers le fournisseur, pièces jointes, file d'attente
+  canonscan/autostart.py   démarrage automatique, pare-feu
+  canonscan/canon_summary.py  fiche des réglages Canon
+
+CONFIGURATION ET JOURNAL
+  Windows : %APPDATA%\CanonScanSetup\
+  macOS   : ~/Library/Application Support/CanonScanSetup/
+  (config.json contient vos mots de passe : ne le partagez pas)
