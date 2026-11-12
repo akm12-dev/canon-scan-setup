@@ -1,0 +1,47 @@
+name: Build macOS
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+jobs:
+  macos:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Python 3.12 de python.org (universal2, Intel + Apple Silicon)
+        run: |
+          curl -sSLo python.pkg https://www.python.org/ftp/python/3.12.10/python-3.12.10-macos11.pkg
+          sudo installer -pkg python.pkg -target /
+          /Library/Frameworks/Python.framework/Versions/3.12/bin/python3 -c "import tkinter, sys; print(sys.version, tkinter.TkVersion)"
+
+      - name: Compilation de l'application et du .dmg
+        env:
+          PYTHON: /Library/Frameworks/Python.framework/Versions/3.12/bin/python3
+        run: bash build_mac.sh
+
+      - name: Contrôles
+        run: |
+          APP="dist/Canon Scan Setup.app"
+          lipo -archs "$APP/Contents/MacOS/Canon Scan Setup"
+          plutil -p "$APP/Contents/Info.plist" | grep -E "ShortVersion|Identifier|LocalNetwork"
+          shasum -a 256 dist/*.dmg
+
+      - name: Capture d'écran de l'interface (contrôle visuel)
+        continue-on-error: true
+        run: |
+          "dist/Canon Scan Setup.app/Contents/MacOS/Canon Scan Setup" &
+          PID=$!
+          sleep 15
+          kill -0 $PID && echo "L'application tourne toujours après 15 s"
+          screencapture -x macos-screen.png || true
+          kill $PID || true
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: canon-scan-setup-macos
+          path: |
+            dist/*.dmg
+            macos-screen.png
