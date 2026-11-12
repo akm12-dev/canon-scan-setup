@@ -86,8 +86,11 @@ class App(tk.Tk):
 
         self.title(f"{APP_NAME} {VERSION}")
         self._set_icon()
-        self.geometry("1120x800")
-        self.minsize(960, 620)
+        # Taille adaptée à l'écran (petits portables, Mac 13 pouces)
+        sw, sh = self.winfo_screenwidth(), self.winfo_screenheight()
+        w, h = min(1120, sw - 40), min(800, sh - 100)
+        self.geometry(f"{w}x{h}+{max(0, (sw - w) // 2)}+{max(0, (sh - h) // 3)}")
+        self.minsize(min(960, w), min(620, h))
         self.configure(bg=BG)
         self._style()
         self._vars()
