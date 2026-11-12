@@ -288,14 +288,16 @@ class App(tk.Tk):
         self.lbl_title.pack(anchor="w")
         self.lbl_sub = ttk.Label(head, text="", style="Sub.TLabel", wraplength=WRAP, justify="left")
         self.lbl_sub.pack(anchor="w", pady=(2, 0))
+        head.bind("<Configure>", lambda e: self.lbl_sub.configure(wraplength=max(300, min(WRAP + 120, e.width - 56))))
 
         bar = tk.Frame(main, bg=SOFT, highlightthickness=0)
         bar.pack(side="bottom", fill="x")
         tk.Frame(main, bg=BORDER, height=1).pack(side="bottom", fill="x")
-        tk.Label(bar, text=f"Configuration : {config.config_path()}", bg=SOFT, fg=MUTED).pack(
-            side="left", padx=28, pady=10)
+        # le bouton d'abord : il garde sa place si la fenêtre est étroite
         ttk.Button(bar, text="Enregistrer", style="Accent.TButton", command=self.save).pack(
             side="right", padx=28, pady=8)
+        tk.Label(bar, text=f"Configuration : {config.config_path()}", bg=SOFT, fg=MUTED, anchor="w").pack(
+            side="left", padx=(28, 0), pady=10, fill="x", expand=True)
 
         self.content = ttk.Frame(main)
         self.content.pack(fill="both", expand=True)
