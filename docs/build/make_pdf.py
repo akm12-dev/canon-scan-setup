@@ -177,7 +177,7 @@ def on_cover(c, doc):
     c.drawString(2.2 * cm, h - 6.0 * cm, "Scan vers dossier et Scan vers e-mail")
     c.drawString(2.2 * cm, h - 6.75 * cm, "pour imprimantes Canon — PC Windows et Mac")
     c.setFont("UI", 10); c.setFillColor(colors.HexColor("#FFE5E8"))
-    c.drawString(2.2 * cm, h - 9.6 * cm, "Version 1.0  •  Novembre 2026")
+    c.drawString(2.2 * cm, h - 9.6 * cm, "Version 1.1  •  Novembre 2026")
     c.setFillColor(MUTED); c.setFont("UI", 8.5)
     c.drawString(2.2 * cm, 1.5 * cm, "Canon, imageRUNNER, i-SENSYS et MAXIFY sont des marques de Canon Inc. "
                                      "Ce logiciel est indépendant et n'est pas édité par Canon.")
@@ -216,7 +216,7 @@ add(Spacer(1, 6))
 toc = [["Section", "Contenu", "Page"],
        ["1", "Principe et prérequis", "2"],
        ["2", "Installation (Windows et Mac)", "4"],
-       ["3", "Premier lancement — onglet Accueil", "5"],
+       ["3", "Premier lancement — page Accueil", "5"],
        ["4", "Scan vers dossier (SMB)", "6"],
        ["5", "Scan vers e-mail (SMTP direct ou relais)", "9"],
        ["6", "Réglages à saisir sur l'imprimante Canon", "13"],
@@ -260,7 +260,7 @@ add(box("Le relais ne fonctionne que si l'ordinateur est allumé",
 add(P("Prérequis", "h2"))
 add(table([["Élément", "Détail"],
            ["Ordinateur", "Windows 10 ou 11 (y compris édition Famille), ou macOS 11 Big Sur et plus récent."],
-           ["Python", "Python 3.9 ou plus récent, gratuit (python.org). Aucun autre module à installer."],
+           ["Logiciel", "Aucun prérequis : Python est inclus dans l'exécutable Windows et dans l'application Mac."],
            ["Droits", "Un compte administrateur de l'ordinateur (demandé uniquement pour créer le partage "
                       "et ouvrir le pare-feu)."],
            ["Réseau", "L'imprimante et l'ordinateur sur le même réseau local (même box / même routeur)."],
@@ -275,46 +275,53 @@ add(PageBreak())
 
 # ------------------------------------------------------------------ 2. Installation
 add(P("SECTION 2", "kicker")); add(P("Installation", "h1"))
-add(P("Le logiciel est livré sous forme de dossier <b>CanonScanSetup</b>. Copiez ce dossier sur l'ordinateur "
-      "qui recevra les numérisations, par exemple dans Documents."))
-add(table([["Fichier", "Rôle"],
-           ["Lancer_Windows.bat", "Démarre le logiciel sous Windows (double-clic)."],
-           ["Lancer_Mac.command", "Démarre le logiciel sous macOS (clic droit > Ouvrir)."],
-           ["CanonScanSetup.py", "Programme principal (peut aussi être lancé en ligne de commande)."],
-           ["canonscan/", "Modules du logiciel : interface, partage, relais SMTP…"],
-           ["build_windows.bat / build_mac.sh", "Facultatif : crée un exécutable autonome (.exe / .app)."],
-           ["LISEZMOI.txt", "Résumé rapide."]], [5.2 * cm, W - 5.2 * cm]))
+add(P("Téléchargez la version officielle sur <b>akm12.com/logiciels/canon-scan-setup</b> : un fichier "
+      "<b>.exe</b> pour Windows, une image disque <b>.dmg</b> pour Mac. Python est inclus : rien d'autre à "
+      "installer. Installez le logiciel sur l'ordinateur qui recevra les numérisations."))
+add(table([["Fichier", "Ordinateur"],
+           ["CanonScanSetup-1.1.0-windows.exe", "Windows 10 ou 11, 64 bits. Aucune installation : le fichier se lance directement."],
+           ["CanonScanSetup-1.1.0-macos.dmg", "macOS 11 Big Sur ou plus récent, Mac Intel et Apple Silicon (M1 à M4)."]],
+          [6.2 * cm, W - 6.2 * cm]))
 add(P("2.1 Sous Windows", "h2"))
 for s in steps([
-    "Installez Python depuis <b>python.org/downloads</b>. Pendant l'installation, cochez "
-    "<b>« Add python.exe to PATH »</b>.",
-    "Ouvrez le dossier CanonScanSetup et double-cliquez sur <b>Lancer_Windows.bat</b>.",
+    "Copiez <b>CanonScanSetup-1.1.0-windows.exe</b> sur le PC, par exemple dans Documents, puis double-cliquez dessus.",
     "Si Windows affiche « Windows a protégé votre ordinateur », cliquez sur <b>Informations "
-    "complémentaires</b> puis <b>Exécuter quand même</b>."]):
+    "complémentaires</b> puis <b>Exécuter quand même</b>.",
+    "Facultatif : vérifiez l'empreinte du fichier. Dans PowerShell, tapez "
+    "<font name='Mono'>Get-FileHash .\\CanonScanSetup-1.1.0-windows.exe</font> et comparez le résultat avec "
+    "l'empreinte SHA-256 publiée sur le site."]):
     add(s)
 add(P("2.2 Sous macOS", "h2"))
 for s in steps([
-    "Installez Python depuis <b>python.org/downloads/macos</b> (la version d'Apple fournie avec les outils "
-    "de développement fonctionne aussi, mais son interface est moins soignée).",
-    "Faites un <b>clic droit</b> sur <b>Lancer_Mac.command</b> > <b>Ouvrir</b>, puis confirmez. "
-    "Les fois suivantes, un double-clic suffit.",
-    "Si macOS indique que le fichier n'est pas exécutable, ouvrez le Terminal, tapez <font name='Mono'>chmod +x </font>"
-    "suivi d'un espace, glissez le fichier dans la fenêtre, puis appuyez sur Entrée.",
+    "Double-cliquez sur <b>CanonScanSetup-1.1.0-macos.dmg</b> (dossier Téléchargements). Une fenêtre s'ouvre.",
+    "Faites glisser <b>Canon Scan Setup</b> sur le dossier <b>Applications</b>, puis éjectez l'image disque "
+    "(clic droit > Éjecter).",
+    "Ouvrez le dossier Applications et double-cliquez sur <b>Canon Scan Setup</b>. L'application n'est pas "
+    "notariée par Apple : macOS affiche « Apple n'a pas pu vérifier… ». Cliquez sur <b>Terminé</b> "
+    "(ou <b>OK</b>).",
+    "Ouvrez <b>Réglages Système > Confidentialité et sécurité</b>, descendez jusqu'à la rubrique "
+    "<b>Sécurité</b> et cliquez sur <b>Ouvrir quand même</b> à côté de « Canon Scan Setup ». Saisissez le mot "
+    "de passe du Mac, puis cliquez sur <b>Ouvrir</b>. Sous macOS 11 à 14, un <b>clic droit > Ouvrir</b> "
+    "sur l'application suffit.",
+    "Si macOS demande l'autorisation de <b>trouver des appareils sur le réseau local</b>, cliquez sur "
+    "<b>Autoriser</b> : sans elle, le logiciel ne peut pas joindre l'imprimante.",
     "Au premier démarrage du relais e-mail, macOS demande <b>« Autoriser les connexions entrantes ? »</b> : "
     "cliquez sur <b>Autoriser</b>."]):
     add(s)
-add(P("2.3 Exécutable autonome (facultatif)", "h2"))
-add(P("Pour installer le logiciel sur d'autres postes sans Python, créez un exécutable une fois sur un poste "
-      "équipé de Python : <b>build_windows.bat</b> produit <font name='Mono'>dist\\CanonScanSetup.exe</font>, "
-      "<b>build_mac.sh</b> produit <font name='Mono'>dist/CanonScanSetup.app</font>. Ces fichiers ne sont pas "
-      "signés : Windows SmartScreen et macOS Gatekeeper afficheront un avertissement au premier lancement."))
+add(box("Confirmations demandées une seule fois",
+        ["Les lancements suivants se font par un simple double-clic (ou depuis le Launchpad). "
+         "Si « Ouvrir quand même » n'apparaît pas, ouvrez le Terminal et tapez : "
+         "<font name='Mono'>xattr -dr com.apple.quarantine \"/Applications/Canon Scan Setup.app\"</font>",
+         "Pour vérifier l'empreinte du fichier : <font name='Mono'>shasum -a 256 "
+         "~/Downloads/CanonScanSetup-1.1.0-macos.dmg</font>"], "info"))
+add(P("Depuis le code source (avec Python 3.9+) : <b>Lancer_Windows.bat</b> ou <b>Lancer_Mac.command</b>.", "small"))
 add(PageBreak())
 
 # ------------------------------------------------------------------ 3. Accueil
-add(P("SECTION 3", "kicker")); add(P("Premier lancement — onglet Accueil", "h1"))
-add(P("L'onglet Accueil affiche le nom et l'adresse IP de l'ordinateur. <b>Notez cette adresse IP</b> : "
+add(P("SECTION 3", "kicker")); add(P("Premier lancement — page Accueil", "h1"))
+add(P("Le logiciel s'organise en pages, choisies dans la barre latérale à gauche : Accueil, Scan vers dossier, Scan vers e-mail, Réglages Canon et Journal. L'état du relais e-mail reste affiché en bas de cette barre. La page Accueil affiche le nom et l'adresse IP de l'ordinateur. <b>Notez cette adresse IP</b> : "
       "c'est elle que l'imprimante utilisera pour joindre l'ordinateur."))
-add(shot("1_accueil.jpg", "Figure 1 — Onglet Accueil"))
+add(shot("1_accueil.jpg", "Figure 1 — Page Accueil"))
 for s in steps([
     "Relevez l'<b>adresse IP de l'imprimante</b> sur son écran (généralement Menu > Préférences/Paramètres > "
     "Réseau > Paramètres TCP/IP > IPv4, ou en imprimant le rapport réseau).",
@@ -332,7 +339,7 @@ add(PageBreak())
 # ------------------------------------------------------------------ 4. Scan vers dossier
 add(P("SECTION 4", "kicker")); add(P("Scan vers dossier (SMB)", "h1"))
 add(P("4.1 Créer le partage dans le logiciel", "h2"))
-add(shot("2_dossier.jpg", "Figure 2 — Onglet Scan vers dossier", width=13.5 * cm))
+add(shot("2_dossier.jpg", "Figure 2 — Page Scan vers dossier", width=13.5 * cm))
 for s in steps([
     "<b>Dossier de réception</b> : là où arriveront les fichiers. Par défaut <font name='Mono'>C:\\Scans</font> "
     "(Windows) ou <font name='Mono'>/Users/Shared/Scans</font> (Mac). Le dossier est créé s'il n'existe pas.",
@@ -380,7 +387,7 @@ add(table([["Gamme", "Chemin dans l'interface Web (Remote UI)"],
            ["Sur l'écran de l'imprimante", "Numériser et envoyer > Carnet d'adresses > Enregistrer > Fichier "
             "(ou Paramètres > Enregistrer destinataire)"]], [4.3 * cm, W - 4.3 * cm]))
 add(Spacer(1, 6))
-add(P("Saisissez les valeurs affichées dans l'onglet <b>Réglages Canon</b> du logiciel :"))
+add(P("Saisissez les valeurs affichées dans la page <b>Réglages Canon</b> du logiciel :"))
 add(table([["Champ Canon", "Valeur", "Exemple"],
            ["Protocole", "Windows (SMB)", "Windows (SMB)"],
            ["Nom d'hôte", "\\\\IP-du-PC\\NomDuPartage", "\\\\192.168.1.25\\SCANS"],
@@ -392,7 +399,7 @@ add(P("Sur les modèles qui le proposent, cliquez sur <b>Test de connexion</b> a
       "ensuite une numérisation d'essai : le fichier doit apparaître dans le dossier en quelques secondes."))
 add(box("L'imprimante refuse l'identifiant ?",
         ["Essayez la forme <font name='Mono'>NOMDUPC\\scanner</font> dans le champ Nom d'utilisateur "
-         "(le nom du PC figure dans l'onglet Accueil).",
+         "(le nom du PC figure dans la page Accueil).",
          "Vérifiez que l'option <b>Utiliser l'hôte/le domaine de l'ordinateur</b> n'impose pas un domaine "
          "inexistant, et que le nom d'hôte commence bien par deux antislashs."]))
 add(PageBreak())
@@ -412,7 +419,7 @@ add(table([["", "Direct", "Relais via ce PC"],
 add(Spacer(1, 4))
 add(P("En cas de doute, choisissez <b>Relais via ce PC</b>."))
 add(P("5.2 Configurer le compte de messagerie", "h2"))
-add(shot("3_email.jpg", "Figure 3 — Onglet Scan vers e-mail, compte de messagerie", width=13.5 * cm))
+add(shot("3_email.jpg", "Figure 3 — Page Scan vers e-mail, compte de messagerie", width=13.5 * cm))
 for s in steps([
     "Choisissez votre <b>Fournisseur</b> : le serveur, le port et la sécurité se remplissent "
     "automatiquement. Une remarque propre au fournisseur s'affiche sous les champs.",
@@ -456,7 +463,7 @@ for s in steps([
     add(s)
 add(CondPageBreak(14 * cm))
 add(P("5.4 Démarrer le relais local", "h2"))
-add(shot("6_relais.jpg", "Figure 4 — Section Relais SMTP local (bas de l'onglet Scan vers e-mail)", width=13.5 * cm))
+add(shot("6_relais.jpg", "Figure 4 — Section Relais SMTP local (bas de la page Scan vers e-mail)", width=13.5 * cm))
 add(table([["Réglage", "Explication"],
            ["Port d'écoute", "25 par défaut : c'est le port standard, et le seul accepté par certains Canon. "
                              "Si votre imprimante permet de choisir le port, 2525 évite tout conflit."],
@@ -480,7 +487,7 @@ for s in steps([
     "Windows : cliquez sur <b>Autoriser dans le pare-feu</b> (droits administrateur demandés) pour que "
     "l'imprimante puisse joindre le port.",
     "Cliquez sur <b>Tester le relais</b> : un message de test passe par le relais exactement comme le "
-    "ferait l'imprimante. Consultez l'onglet <b>Journal</b> pour suivre son parcours."]):
+    "ferait l'imprimante. Consultez la page <b>Journal</b> pour suivre son parcours."]):
     add(s)
 add(P("5.5 Démarrage automatique", "h2"))
 add(P("Cochez <b>Lancer le relais automatiquement à l'ouverture de session</b>. Le relais tourne alors en "
@@ -519,7 +526,7 @@ add(PageBreak())
 
 # ------------------------------------------------------------------ 6. Fiche Canon
 add(P("SECTION 6", "kicker")); add(P("Réglages à saisir sur l'imprimante", "h1"))
-add(P("L'onglet <b>Réglages Canon</b> rassemble, à partir de vos choix, toutes les valeurs à recopier dans "
+add(P("La page <b>Réglages Canon</b> rassemble, à partir de vos choix, toutes les valeurs à recopier dans "
       "l'imprimante : partage SMB, serveur SMTP, mode choisi, et les principaux codes d'erreur Canon."))
 add(shot("4_canon.jpg", "Figure 5 — Fiche des réglages générée automatiquement"))
 add(P("<b>Copier</b> place la fiche dans le presse-papiers ; <b>Exporter (.txt)</b> l'enregistre pour la "
@@ -530,7 +537,7 @@ add(PageBreak())
 # ------------------------------------------------------------------ 7. Dépannage
 add(P("SECTION 7", "kicker")); add(P("Dépannage", "h1"))
 add(P("Le journal", "h2"))
-add(P("L'onglet <b>Journal</b> affiche en direct chaque connexion de l'imprimante, chaque scan reçu, "
+add(P("La page <b>Journal</b> affiche en direct chaque connexion de l'imprimante, chaque scan reçu, "
       "chaque fichier enregistré et chaque e-mail transmis. Le fichier journal complet est accessible par "
       "le bouton <b>Ouvrir le fichier journal</b>."))
 add(shot("5_journal.jpg", "Figure 6 — Journal : réception d'un scan relayé et enregistré", width=12 * cm))
@@ -538,7 +545,7 @@ add(P("Scan vers dossier", "h2"))
 add(table([["Symptôme", "Cause probable", "Solution"],
            ["Erreur #801 ou « Impossible de se connecter »", "Pare-feu, réseau en profil Public, PC en veille "
             "ou IP du PC changée.", "Recréer le partage avec les options pare-feu et profil Privé ; vérifier "
-            "l'IP dans l'onglet Accueil ; désactiver la mise en veille."],
+            "l'IP dans la page Accueil ; désactiver la mise en veille."],
            ["Erreur #801 sous Windows 11 24H2 alors que tout est correct", "Signature SMB exigée, non gérée "
             "par l'imprimante.", "Cocher « Ne pas exiger la signature SMB », recréer le partage. Mettre à "
             "jour le micrologiciel de l'imprimante."],
@@ -603,18 +610,21 @@ add(table([["Situation", "Action"],
                                                           "modifier le destinataire sur l'imprimante."],
            ["Mot de passe d'application révoqué", "En créer un nouveau, le saisir, « Tester l'envoi »."],
            ["Messages en file d'attente", "Ils sont renvoyés automatiquement ; bouton « Renvoyer la file "
-                                          "d'attente » dans l'onglet Journal pour forcer l'envoi."],
+                                          "d'attente » dans la page Journal pour forcer l'envoi."],
            ["Mode service (avancé)", "Le relais peut être lancé sans interface : "
-                                     "<font name='Mono'>python CanonScanSetup.py --relay</font>"]],
+                                     "<font name='Mono'>CanonScanSetup-…-windows.exe --relay</font> (ou "
+                                     "<font name='Mono'>python CanonScanSetup.py --relay</font> depuis le code source)"]],
           [5 * cm, W - 5 * cm]))
 add(P("Désinstallation", "h2"))
 for s in steps([
-    "Onglet Scan vers dossier : <b>Supprimer le partage</b>, puis confirmez la suppression du compte "
+    "Page Scan vers dossier : <b>Supprimer le partage</b>, puis confirmez la suppression du compte "
     "dédié si vous le souhaitez. Les fichiers déjà numérisés sont conservés.",
-    "Onglet Scan vers e-mail : décochez le démarrage automatique et arrêtez le relais.",
+    "Page Scan vers e-mail : décochez le démarrage automatique et arrêtez le relais.",
     "Windows : supprimez la règle de pare-feu « Canon Scan Relay SMTP » (Pare-feu Windows Defender > "
     "Paramètres avancés > Règles de trafic entrant), si elle a été créée.",
-    "Supprimez le dossier CanonScanSetup et le dossier de configuration indiqué ci-dessus.",
+    "Supprimez le logiciel (Windows : le fichier CanonScanSetup-…-windows.exe ; Mac : faites glisser "
+    "Canon Scan Setup du dossier Applications vers la Corbeille) et le dossier de configuration indiqué "
+    "ci-dessus.",
     "Sur l'imprimante, supprimez ou modifiez les destinataires et le serveur SMTP correspondants."]):
     add(s)
 

@@ -13,6 +13,15 @@ Fiche officielle et téléchargements : https://akm12.com/logiciels/canon-scan-s
 - Préréglages : Gmail, Outlook, Microsoft 365, OVH, IONOS, Infomaniak, Orange, Free, SFR, Yahoo, iCloud.
 - Test de l'imprimante, ouverture de Remote UI, fiche des réglages Canon à copier ou exporter.
 - Journal des opérations et démarrage automatique du relais.
+- Interface avec navigation par étapes : Accueil, Scan vers dossier, Scan vers e-mail, Réglages Canon et Journal.
+
+## Installation
+
+Versions officielles sur https://akm12.com/logiciels/canon-scan-setup :
+
+- **Windows** : `CanonScanSetup-<version>-windows.exe`, à lancer directement.
+- **macOS 11+** (Intel et Apple Silicon) : `CanonScanSetup-<version>-macos.dmg`, glisser l'application dans
+  Applications. Au premier lancement : Réglages Système › Confidentialité et sécurité › Ouvrir quand même.
 
 ## Prérequis
 
@@ -39,7 +48,8 @@ Pour une utilisation en intervention, préférez la version officielle publiée 
 Nécessite PyInstaller (`pip install pyinstaller`).
 
 - Windows : `build_windows.bat` → `dist\CanonScanSetup.exe`
-- macOS : `bash build_mac.sh` → `dist/CanonScanSetup.app`
+- macOS : `bash build_mac.sh` → `dist/Canon Scan Setup.app` et `dist/CanonScanSetup-<version>-macos.dmg`
+  (également compilé par GitHub Actions à chaque tag `v*`, voir `.github/workflows/build-macos.yml`)
 
 ## Structure
 

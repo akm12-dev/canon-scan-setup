@@ -1,4 +1,4 @@
-CANON SCAN SETUP 1.0 — Scan vers dossier & Scan vers e-mail pour imprimantes Canon
+CANON SCAN SETUP 1.1 — Scan vers dossier & Scan vers e-mail pour imprimantes Canon
 ====================================================================================
 
 Le guide complet est dans : docs/Guide_Canon_Scan_Setup.pdf

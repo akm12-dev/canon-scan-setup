@@ -1,4 +1,4 @@
-﻿import sys, tempfile, ctypes
+import sys, tempfile, ctypes
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 import subprocess
@@ -17,8 +17,10 @@ app.lbl_up.config(text="✔ Message de test envoyé à contact@mon-entreprise.fr
 app._set_text(app.txt_share, "Compte local 'scanner' créé.\nCompte masqué de l'écran de connexion.\nDossier prêt : C:\\Scans\nDroits NTFS 'Modification' accordés à scanner.\nPartage \\\\BUREAU-PC\\SCANS créé.\nPare-feu : « Partage de fichiers et d'imprimantes » autorisé (réseaux privés).\n\n✔ TERMINÉ. Sur l'imprimante, créez une destination « Fichier » :\n   Protocole : Windows (SMB)   Hôte : \\\\192.168.1.25\\SCANS\n   Utilisateur : scanner   Mot de passe : Scan-2026!Bx")
 app.v_relay_status.set("En marche — 192.168.1.25:25"); app.lbl_relay.config(style="Ok.TLabel")
 app.btn_relay.config(text="■ Arrêter le relais")
-app.geometry("960x820+40+40")
+app.lbl_side_relay.config(text="●  En marche (port 25)", fg="#8FD9A8")
+app.geometry("1120x800+40+20")
 names = ["accueil", "dossier", "email", "canon", "journal", "relais"]
+pages = {0: "home", 1: "folder", 2: "mail", 3: "canon", 4: "log", 5: "mail"}
 import logging
 lg = logging.getLogger("canonscan"); lg.setLevel(logging.INFO)
 def step(i=0):
@@ -30,8 +32,8 @@ def step(i=0):
             lg.info(m)
     if i >= len(names):
         app.destroy(); return
-    app.nb.select(2 if i == 5 else i); app.update()
-    if i == 5: app.mail_canvas.yview_moveto(1.0); app.update()
+    app.show_page(pages[i]); app.update()
+    if i == 5: app.pages["mail"]["canvas"].yview_moveto(1.0); app.update()
     app.after(900, lambda: grab(i))
 def grab(i):
     app.update()
